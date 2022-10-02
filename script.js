@@ -1,15 +1,15 @@
-console.log("Hello World");
-const input = document.getElementById("note");
-const addButton = document.getElementById("add");
-const list = document.getElementById("list");
 
+const addButton = document.getElementById("add");
 addButton.addEventListener("click", handleButton);
 
 function handleButton(){
-    console.log(input.value);
-    const item = document.createElement("li");
-    item.innerText = input.value;
+    const input = document.getElementById("text");
+    const note = input.value;
 
-    list.appendChild(item);
-    input.value = "";
+    if(note){
+        const list = document.getElementById("list");
+        const item = document.getElementById("li");
+        item.textContent = note;
+        list.appendChild(item);
+    }
 }
