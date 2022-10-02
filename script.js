@@ -11,5 +11,7 @@ function handleButton(){
         const item = document.getElementById("li");
         item.textContent = note;
         list.appendChild(item);
+        input.value = "";
+        input.focus();
     }
 }
