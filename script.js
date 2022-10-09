@@ -9,8 +9,25 @@ const notes = [
 //see HTML
 function buildLIItem(note){
 const item = document.createElement("li");
-item.textContent = note;
-item.addEventListener("click", handleClickLIItem);
+item.id = note.id;
+
+const article = document.createElement("article");
+const title = document.createElement("header");
+title.textContent = note.title;
+const text = document.createElement("p");
+text.textContent = note.text;
+
+const controls = document.createElement("div");
+const button = document.createElement("button");
+button.textContent = "Delete";
+button.addEventListener("click", handleClickDelete(note.id));
+controls.appendChild(button);
+
+article.appendChild(title);
+article.appendChild(text);
+article.appendChild(controls);
+article.appendChild(article);
+
 return item;
 }
 
@@ -26,22 +43,36 @@ function handleClick(){
 
 
 function handleClickLIItem(event){
-const list = document.getElementById("list");
-list.removeChild(event.target);
+    return function{
+        const item = document.getElementById(id);
+        const list = document.getElementById("list");
+        list.removeChild(item);
+        const pos = notes.findIndex((note) => note.id === id);
+        notes.splice(pos, 1);
+    };
 }
 
 function add(){
-const input = document.getElementById("text");
-    const note = input.value;
-
-    if(note){
+    const title = document.getElementById("title");
+    const text = document.getElementById("text");
+    if(title.value || text.value){
         const list = document.getElementById("list");
-        const item = buildLIItem("li");
+        const note = createNote(title.value, text.value);
+        const item = buildLIItem(note);
         list.appendChild(item);
         notes.push(note);
-        input.value = "";
-        input.focus();
-
+        title.value = "";
+        text.value = "";
     }
+}
 
+function createNote(title, text){
+    const id = generateId(title, text);
+    return {id, title, text};
+}
+
+function generateId(title, text, length=10){
+    return CryptoJS.SHA256(title + text + new Data())
+        .toString()
+        ,subString(0, length);
 }
