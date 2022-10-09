@@ -19,7 +19,6 @@ const files = [
   "/notes/assets/favicon/mstile-310x310.png",
 ];
 
-
 self.addEventListener("message", (event) => {
   if (event.data.action === "skipWaiting") {
     self.skipWaiting();
