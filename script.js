@@ -1,10 +1,10 @@
 
 //Model
-const item = [
- //"note1"
- //"note2"
- //"note3"
-]
+const notes = [
+ // { id: "676c9ba771", title: "Title 1", text: "ToDo 1" },
+  // { id: "dc19d1538f", title: "Title 2", text: "ToDo 2" },
+  // { id: "fd8c75b4fb", title: "Title 3", text: "ToDo 2" },
+];
 //View
 //see HTML
 function buildLIItem(note){
@@ -18,19 +18,12 @@ return item;
 document.addEventListener("DOMContentLoaded", function(){
 const button = document.getElementById("add");
 button.addEventListener("click", handleClick);
-
-const input = document.getElementById("text");
-input.getEventListener("keydown", handleKeyDown);
-}
+});
 
 function handleClick(){
     add();
 }
 
-function handleKeyDown(event){
-if(event.key === "Enter"){
-add();
-}
 
 function handleClickLIItem(event){
 const list = document.getElementById("list");
