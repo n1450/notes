@@ -53,6 +53,31 @@ function handleClickDelete(id){
     };
 }
 
+function handleRegistration(registration) {
+  registration.addEventListener("updatefound", function () {
+    if (registration.installing) {
+      const worker = registration.installing;
+      worker.addEventListener("statechange", function () {
+        if (worker.state === "installed") {
+          handleUpdate(worker);
+        }
+      });
+    } else if (registration.waiting) {
+      const worker = registration.waiting;
+      if (worker.state === "installed") {
+        handleUpdate(worker);
+      }
+    }
+  });
+}
+
+function handleUpdate(worker) {
+  if (navigator.serviceWorker.controller) {
+    worker.postMessage({ action: "skipWaiting" });
+  }
+}
+
+
 function add(){
     const title = document.getElementById("title");
     const text = document.getElementById("text");
@@ -82,12 +107,30 @@ function init(){
 registerEventHandlers();
 load();
 draw();
+registerServiceWorker();
+
 }
 
 function registerEventHandlers(){
 const button = document.getElementById("add");
 button.addEventListener("click", handleClick);
 }
+
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+ let refreshing;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
+    });
+    navigator.serviceWorker
+      .register("/notes/sw.js", { scope: "/notes/ " })
+      .then((registration) => handleRegistration(registration))
+      .catch((error) => console.log("Service Worker registration failed!", error));
+  }
+}
+
 
 function load(){
     notes = JSON.parse(localStorage.getItem("notes")) || [];
