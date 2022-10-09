@@ -1,6 +1,6 @@
 
 //Model
-const notes = [
+let notes = [
  // { id: "676c9ba771", title: "Title 1", text: "ToDo 1" },
   // { id: "dc19d1538f", title: "Title 2", text: "ToDo 2" },
   // { id: "fd8c75b4fb", title: "Title 3", text: "ToDo 2" },
@@ -33,22 +33,23 @@ return item;
 
 //Controller
 document.addEventListener("DOMContentLoaded", function(){
-const button = document.getElementById("add");
-button.addEventListener("click", handleClick);
+init();
 });
 
 function handleClick(){
     add();
+    save();
 }
 
 
-function handleClickLIItem(event){
+function handleClickDelete(id){
     return function{
         const item = document.getElementById(id);
         const list = document.getElementById("list");
         list.removeChild(item);
         const pos = notes.findIndex((note) => note.id === id);
         notes.splice(pos, 1);
+        save();
     };
 }
 
@@ -75,4 +76,29 @@ function generateId(title, text, length=10){
     return CryptoJS.SHA256(title + text + new Data())
         .toString()
         ,subString(0, length);
+}
+
+function init(){
+registerEventHandlers();
+load();
+draw();
+}
+
+function registerEventHandlers(){
+const button = document.getElementById("add");
+button.addEventListener("click", handleClick);
+}
+
+function load(){
+    notes = JSON.parse(localStorage.getItem("notes")) || [];
+}
+
+function save(){
+    localStorage.setItem("notes", JSON.stringify(notes));
+}
+
+function draw(){
+    const title = document.getElementById("list");
+    while(list.firstChild) list.removeChild(list.firstChild);
+    notes.forEach((note) => list.appendChild(buildLIItem(note)));
 }
