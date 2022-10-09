@@ -1,9 +1,21 @@
 
 const addButton = document.getElementById("add");
-addButton.addEventListener("click", handleButton);
+addButton.addEventListener("click", handleClick);
 
-function handleButton(){
-    const input = document.getElementById("text");
+const input = document.getElementById("text");
+input.addEventListener("keydown", handleKeyDown);
+
+function handleClick(){
+    add();
+}
+
+function handleKeyDown(event){
+if(event.key === "Enter"){
+add();
+}
+
+function add(){
+const input = document.getElementById("text");
     const note = input.value;
 
     if(note){
@@ -13,5 +25,6 @@ function handleButton(){
         list.appendChild(item);
         input.value = "";
         input.focus();
+
     }
 }
